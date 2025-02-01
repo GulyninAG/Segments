@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# RCS1013: Use predefined type
+dotnet_diagnostic.RCS1013.severity = suggestion

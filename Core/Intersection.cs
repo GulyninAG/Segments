@@ -1,17 +1,12 @@
 ﻿using Segments.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Segments.Core
 {
   // В данном классе находится логика по пересечению отрезками прямоугольной области и нахождению отрезков внутри неё.
-  internal class Intersection
+  internal static class Intersection
   {
     // Получаем отрезки, которые находятся в прям. области или пересекают её
-    internal List<Segment> GetSegmentsInOrIntersectingRectangle(List<Segment> segments, RectangleArea rectangle)
+    internal static List<Segment> GetSegmentsInOrIntersectingRectangle(IReadOnlyList<Segment> segments, RectangleArea rectangle)
     {
       List<Segment> segmentsInOrIntersectingRectangle = new List<Segment>();
 
@@ -27,16 +22,16 @@ namespace Segments.Core
     }
 
     // Проверяем находится ли отрезок в прямоугольной области
-    internal bool IsInside(Segment segment, RectangleArea rectangle)
+    internal static bool IsInside(Segment segment, RectangleArea rectangle)
     {
-      return (segment.Start.X >= rectangle.BottomLeft.X && segment.Start.X <= rectangle.TopRight.X &&
-              segment.Start.Y >= rectangle.BottomLeft.Y && segment.Start.Y <= rectangle.TopRight.Y) &&
+      return segment.Start.X >= rectangle.BottomLeft.X && segment.Start.X <= rectangle.TopRight.X &&
+              segment.Start.Y >= rectangle.BottomLeft.Y && segment.Start.Y <= rectangle.TopRight.Y &&
              (segment.End.X >= rectangle.BottomLeft.X && segment.End.X <= rectangle.TopRight.X &&
               segment.End.Y >= rectangle.BottomLeft.Y && segment.End.Y <= rectangle.TopRight.Y);
     }
 
     // Проверяем пересекает ли отрезок прямоугольную область
-    internal bool Intersects(Segment segment, RectangleArea rectangle)
+    internal static bool Intersects(Segment segment, RectangleArea rectangle)
     {
       PointF[] rectanglePoints = new PointF[]
       {
@@ -62,7 +57,7 @@ namespace Segments.Core
     }
 
     // Проверяем пересекаются ли отрезки
-    private bool SegmentsIntersect(Segment s1, Segment s2)
+    private static bool SegmentsIntersect(Segment s1, Segment s2)
     {
       PointF p1 = s1.Start;
       PointF p2 = s1.End;
@@ -94,14 +89,14 @@ namespace Segments.Core
       return false; // Не пересекаются
     }
 
-    private int Orientation(PointF p, PointF q, PointF r)
+    private static int Orientation(PointF p, PointF q, PointF r)
     {
-      double val = (q.Y - p.Y) * (r.X - q.X) - (q.X - p.X) * (r.Y - q.Y);
+      double val = ((q.Y - p.Y) * (r.X - q.X)) - ((q.X - p.X) * (r.Y - q.Y));
       if (val == 0) return 0; // Коллинеарны
       return (val > 0) ? 1 : 2; // 1 - по часовой, 2 - против часовой
     }
 
-    private bool IsOnSegment(PointF p, PointF q, PointF r)
+    private static bool IsOnSegment(PointF p, PointF q, PointF r)
     {
       return q.X <= Math.Max(p.X, r.X) && q.X >= Math.Min(p.X, r.X) &&
              q.Y <= Math.Max(p.Y, r.Y) && q.Y >= Math.Min(p.Y, r.Y);

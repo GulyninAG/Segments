@@ -1,28 +1,11 @@
 ﻿using Segments.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Segments.Core
 {
-  // Класс для отрисовки отрезков и прямоугольной области. Представляет собой реализацию паттерна "Singleton".
-  internal class DrawingProvider
+  // Класс для отрисовки отрезков и прямоугольной области.
+  internal static class DrawingProvider
   {
-    private static readonly Lazy<DrawingProvider> lazy = new Lazy<DrawingProvider>(() => new DrawingProvider());
-
-    private DrawingProvider()
-    {
-              
-    }
-
-    public static DrawingProvider GetInstance()
-    {
-      return lazy.Value;
-    }
-
-    internal void DrawSegments(Graphics g, List<Segment> segs, Color color)
+    internal static void DrawSegments(Graphics g, IReadOnlyList<Segment> segs, Color color)
     {
       using (Pen pen = new Pen(color))
       {
@@ -33,7 +16,7 @@ namespace Segments.Core
       }
     }
 
-    internal void DrawRectangleArea(Graphics g, RectangleArea rect, Color color)
+    internal static void DrawRectangleArea(Graphics g, RectangleArea rect, Color color)
     {
       using (Pen pen = new Pen(color))
       {

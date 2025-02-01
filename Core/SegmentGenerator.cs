@@ -1,45 +1,59 @@
-﻿using Segments.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Drawing;
+using Segments.Model;
 
 namespace Segments.Core
 {
   // Класс по генерации отрезков на основе точек
   internal class SegmentGenerator
   {
-    public int MaxWidth { get; set; }
-    public int MaxHeight { get; set; }
-    public int NumberOfPoints { get; set; }
+    public int MaxWidth { get; }
+    public int MaxHeight { get; }
+    public int NumberOfPoints { get; }
 
-    internal List<Segment> segments = new List<Segment>();
-
+    private readonly Random _random;
     public SegmentGenerator(int numberOfPoints, int maxWidth, int maxHeight)
     {
+      if (numberOfPoints < 2)
+        throw new ArgumentException("Количество точек должно быть больше 2.", nameof(numberOfPoints));
+      if (maxWidth <= 0)
+        throw new ArgumentException("Максимальная ширина должна быть больше 0.", nameof(maxWidth));
+      if (maxHeight <= 0)
+        throw new ArgumentException("Максимальная ширина должна быть больше 0.", nameof(maxHeight));
+
       NumberOfPoints = numberOfPoints;
       MaxWidth = maxWidth;
-      MaxHeight = maxHeight; 
-
+      MaxHeight = maxHeight;
+      _random = new Random();
     }
 
-    internal List<Segment> GetSegments()
+    public IReadOnlyList<Segment> GetSegments()
     {
-      PointF[] points = new PointF[NumberOfPoints];
-      List<Segment> segments = new List<Segment>();
-      Random random = new Random();
+      var points = GenerateRandomPoints();
+      return CreateSegments(points);
+    }
 
+    private PointF[] GenerateRandomPoints()
+    {
+      var points = new PointF[NumberOfPoints];
       for (int i = 0; i < NumberOfPoints; i++)
       {
-        points[i] = new PointF(random.Next(0, MaxWidth), random.Next(0, MaxHeight));
+        points[i] = new PointF(
+            _random.Next(0, MaxWidth),
+            _random.Next(0, MaxHeight)
+        );
       }
+      return points;
+    }
 
-      for (int i = 0; i < NumberOfPoints - 1; i++)
+    private IReadOnlyList<Segment> CreateSegments(PointF[] points)
+    {
+      var segments = new List<Segment>();
+      for (int i = 0; i < points.Length - 1; i++)
       {
         segments.Add(new Segment(points[i], points[i + 1]));
       }
-
       return segments;
     }
   }
