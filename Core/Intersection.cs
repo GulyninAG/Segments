@@ -6,19 +6,21 @@ namespace Segments.Core
   internal static class Intersection
   {
     // Получаем отрезки, которые находятся в прям. области или пересекают её
-    internal static List<Segment> GetSegmentsInOrIntersectingRectangle(IReadOnlyList<Segment> segments, RectangleArea rectangle)
+    internal static IEnumerable<Segment> GetSegmentsInOrIntersectingRectangle(IReadOnlyList<Segment> segments, RectangleArea rectangle, CancellationToken cancellationToken)
     {
-      List<Segment> segmentsInOrIntersectingRectangle = new List<Segment>();
+      if (segments == null || segments.Count == 0)
+        throw new ArgumentNullException(nameof(segments), "Список с отрезками не может быть пустым.");
+      if (rectangle == null)
+        throw new ArgumentNullException(nameof(rectangle), "Прямоугольник не был передан.");
 
-      foreach (var segment in segments)
-      {
-        if (IsInside(segment, rectangle) || Intersects(segment, rectangle))
-        {
-          segmentsInOrIntersectingRectangle.Add(segment);
-        }
-      }
-
-      return segmentsInOrIntersectingRectangle;
+      return segments.AsParallel()
+                    .WithCancellation(cancellationToken)
+                    .Where(segment =>
+                          {
+                            cancellationToken.ThrowIfCancellationRequested();
+                            return IsInside(segment, rectangle) || Intersects(segment, rectangle);
+                          }
+                        );
     }
 
     // Проверяем находится ли отрезок в прямоугольной области

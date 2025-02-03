@@ -6,7 +6,7 @@ namespace Segments.Core
   // Класс по сохранению координат отрезков в бинарный файл
   internal static class SegmentSaver
   {
-    private static readonly ILogger Logger = CreateLogger();
+    private static readonly ILogger Logger = SerilogFileLogger.CreateLogger();
 
     public static void SaveSegmentsToBinaryFile(IReadOnlyList<Segment> segments, string filePath)
     {
@@ -42,15 +42,6 @@ namespace Segments.Core
         Logger.Error(ex, $"Не удалось записать отрезки в файл {filePath}.");
         throw;
       }
-    }
-
-    private static ILogger CreateLogger()
-    {
-      Log.Logger = new LoggerConfiguration()
-          .WriteTo.File("log.txt")
-          .CreateLogger();
-
-      return Log.Logger;
     }
   }
 }

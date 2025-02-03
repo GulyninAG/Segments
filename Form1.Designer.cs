@@ -28,10 +28,13 @@
     /// </summary>
     private void InitializeComponent()
     {
-      this.components = new System.ComponentModel.Container();
-      this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(800, 450);
-      this.Text = "Form1";
+      SuspendLayout();
+      AutoScaleDimensions = new SizeF(10F, 25F);
+      AutoScaleMode = AutoScaleMode.Font;
+      ClientSize = new Size(2045, 949);
+      Name = "SegmentsForm";
+      Text = "Form1";
+      ResumeLayout(false);
     }
 
     #endregion

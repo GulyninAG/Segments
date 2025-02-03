@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using Segments.Model;
+﻿using Segments.Model;
 
 namespace Segments.Core
 {
@@ -11,9 +8,11 @@ namespace Segments.Core
     public int MaxWidth { get; }
     public int MaxHeight { get; }
     public int NumberOfPoints { get; }
+    public int MarginLeft { get; }
+    public int MarginTop { get; }
 
     private readonly Random _random;
-    public SegmentGenerator(int numberOfPoints, int maxWidth, int maxHeight)
+    public SegmentGenerator(int numberOfPoints, int maxWidth, int maxHeight, int marginleft, int marginTop)
     {
       if (numberOfPoints < 2)
         throw new ArgumentException("Количество точек должно быть больше 2.", nameof(numberOfPoints));
@@ -25,6 +24,8 @@ namespace Segments.Core
       NumberOfPoints = numberOfPoints;
       MaxWidth = maxWidth;
       MaxHeight = maxHeight;
+      MarginLeft = marginleft;
+      MarginTop = marginTop;
       _random = new Random();
     }
 
@@ -40,8 +41,8 @@ namespace Segments.Core
       for (int i = 0; i < NumberOfPoints; i++)
       {
         points[i] = new PointF(
-            _random.Next(0, MaxWidth),
-            _random.Next(0, MaxHeight)
+            _random.Next(MarginLeft, MaxWidth),
+            _random.Next(MarginTop, MaxHeight)
         );
       }
       return points;
