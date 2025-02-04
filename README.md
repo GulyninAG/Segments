@@ -13,8 +13,8 @@
 <li>.NET 6.0 или выше.</li>
 <li>Windows OS (приложение использует Windows Forms).</li>
 </ol>
-<ol>
 <h3>Установка</h3>
+<ol>
 <li>Клонируйте репозиторий:
 <code>git clone https://github.com/GulyninAG/Segments.git</code></li>
 <li>Откройте решение в Visual Studio.</li>
